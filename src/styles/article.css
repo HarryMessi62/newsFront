@@ -1,0 +1,148 @@
+/* Дополнительные стили для контента статей */
+
+.article-content {
+  line-height: 1.7;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Обеспечиваем перенос всех текстовых элементов */
+.article-content * {
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 100%;
+}
+
+/* Специальные правила для ссылок */
+.article-content a {
+  word-break: break-all;
+  overflow-wrap: break-word;
+}
+
+/* Обработка длинных строк без пробелов */
+.article-content p,
+.article-content div,
+.article-content span {
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.article-content img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 8px;
+  margin: 1rem 0;
+}
+
+.article-content pre {
+  background-color: #1e293b;
+  border: 1px solid #374151;
+  border-radius: 6px;
+  padding: 1rem;
+  overflow-x: auto;
+  color: #e5e7eb;
+  margin: 1rem 0;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  max-width: 100%;
+}
+
+.article-content code {
+  background-color: #374151;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9em;
+  color: #fbbf24;
+}
+
+.article-content table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  background-color: #1e293b;
+  border-radius: 6px;
+  overflow: hidden;
+  table-layout: fixed;
+}
+
+/* Обертка для таблиц с горизонтальной прокруткой */
+.article-content table {
+  display: block;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.article-content table tbody {
+  display: table;
+  width: 100%;
+}
+
+.article-content th,
+.article-content td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #374151;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  max-width: 200px;
+}
+
+.article-content th {
+  background-color: #374151;
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+.article-content td {
+  color: #d1d5db;
+}
+
+.article-content hr {
+  border: none;
+  border-top: 1px solid #374151;
+  margin: 2rem 0;
+}
+
+/* Стили для crypto-widget элементов, если они не обработались */
+crypto-widget {
+  display: inline-block;
+  background-color: #374151;
+  color: #fbbf24;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-weight: 600;
+}
+
+/* Улучшенные стили для списков */
+.article-content ul li,
+.article-content ol li {
+  margin-bottom: 0.5rem;
+}
+
+.article-content ul ul,
+.article-content ol ol,
+.article-content ul ol,
+.article-content ol ul {
+  margin-top: 0.5rem;
+  margin-left: 1rem;
+}
+
+/* Стили для блокквотов */
+.article-content blockquote {
+  position: relative;
+}
+
+.article-content blockquote::before {
+  content: '"';
+  font-size: 3rem;
+  color: #3b82f6;
+  position: absolute;
+  left: -1rem;
+  top: -0.5rem;
+  font-family: serif;
+} 
