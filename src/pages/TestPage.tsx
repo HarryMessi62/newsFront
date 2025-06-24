@@ -4,7 +4,6 @@ import { clearAllLikes } from '../utils/hybridLikeStorage';
 import { clearAllComments } from '../utils/hybridCommentStorage';
 import { toggleArticleLike, getArticleLikeInfo, getUserLikeStats } from '../utils/hybridLikeStorage';
 import { addComment, getArticleComments, getUserCommentStats } from '../utils/hybridCommentStorage';
-import { SitemapManager } from '../components/SitemapManager';
 
 const TestPage: React.FC = () => {
   const [userId, setUserId] = useState('');
@@ -239,8 +238,17 @@ const TestPage: React.FC = () => {
         )}
 
         {activeTab === 'sitemap' && (
-          <div className="mb-6">
-            <SitemapManager />
+          <div className="mb-6 bg-slate-800 rounded-lg p-6">
+            <h2 className="text-xl font-semibold mb-4">Sitemap Management</h2>
+            <p className="text-gray-400">
+              Sitemap теперь генерируется автоматически на бэкенде.
+            </p>
+            <p className="text-gray-400 mt-2">
+              Доступен по адресу: <a href="/sitemap.xml" target="_blank" className="text-blue-400 hover:text-blue-300">/sitemap.xml</a>
+            </p>
+            <p className="text-gray-400 mt-2">
+              Robots.txt: <a href="/robots.txt" target="_blank" className="text-blue-400 hover:text-blue-300">/robots.txt</a>
+            </p>
           </div>
         )}
       </div>
