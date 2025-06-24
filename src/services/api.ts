@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Создаем экземпляр axios с базовой конфигурацией
 const api = axios.create({
-  baseURL: 'https://news-back-h85g.vercel.app',
+  baseURL: '/api',
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
