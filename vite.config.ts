@@ -1,25 +1,22 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
       '/api': {
-        target: 'https://news-back-h85g.vercel.app/',
+        target: 'https://news-back-h85g.vercel.app', // Убрать /api отсюда
         changeOrigin: true,
-        secure: false,
+        secure: true, // Для HTTPS лучше true
+        rewrite: (path) => path, // Оставляем путь как есть
       },
       '/sitemap.xml': {
-        target: 'https://news-back-h85g.vercel.app/',
+        target: 'https://news-back-h85g.vercel.app',
         changeOrigin: true,
-        secure: false,
+        secure: true,
       },
       '/robots.txt': {
-        target: 'https://news-back-h85g.vercel.app/',
+        target: 'https://news-back-h85g.vercel.app',
         changeOrigin: true,
-        secure: false,
+        secure: true,
       }
     }
   }
