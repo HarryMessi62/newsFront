@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://news-back-h85g.vercel.app/sitemap.xml"
+    },
+    {
+      "source": "/robots.txt", 
+      "destination": "https://news-back-h85g.vercel.app/robots.txt"
+    }
+  ]
+}
