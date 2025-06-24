@@ -7,17 +7,17 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: 'https://news-back-h85g.vercel.app/',
         changeOrigin: true,
         secure: false,
       },
       '/sitemap.xml': {
-        target: 'http://localhost:5000',
+        target: 'https://news-back-h85g.vercel.app/',
         changeOrigin: true,
         secure: false,
       },
       '/robots.txt': {
-        target: 'http://localhost:5000',
+        target: 'https://news-back-h85g.vercel.app/',
         changeOrigin: true,
         secure: false,
       }
