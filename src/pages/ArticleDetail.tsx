@@ -27,7 +27,7 @@ import { toggleArticleLike, getArticleLikeInfo, isArticleLikedLocally } from '..
 import ArticleContent from '../components/ArticleContent';
 import CryptoWidget from '../components/CryptoWidget';
 import CommentSection from '../components/CommentSection';
-import { Helmet } from 'react-helmet-async';
+
 
 
 
@@ -262,40 +262,38 @@ const ArticleDetail = () => {
 
   return (
     <>
-      <Helmet>
-        {/* Basic Meta Tags */}
-        <title>{article.title} | Crypto News</title>
-        <meta name="description" content={getArticleDescription()} />
-        <meta name="keywords" content={(article.tags || []).join(', ')} />
-        <meta name="author" content={getAuthorNameSafe(article.author)} />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href={window.location.href} />
-        
-        {/* Open Graph Tags */}
-        <meta property="og:type" content="article" />
-        <meta property="og:title" content={article.title} />
-        <meta property="og:description" content={getArticleDescription()} />
-        <meta property="og:image" content={getImageUrlSafe(article) || ""} />
-        <meta property="og:url" content={window.location.href} />
-        <meta property="og:site_name" content="Crypto News" />
-        <meta property="article:published_time" content={article.createdAt} />
-        <meta property="article:author" content={getAuthorNameSafe(article.author)} />
-        <meta property="article:section" content={article.category || ""} />
-        {(article.tags || []).map((tag, index) => (
-          <meta key={index} property="article:tag" content={tag} />
-        ))}
-        
-        {/* Twitter Card Tags */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={article.title || ""} />
-        <meta name="twitter:description" content={getArticleDescription()} />
-        <meta name="twitter:image" content={getImageUrlSafe(article) || ""} />
-        
-        {/* Structured Data */}
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      </Helmet>
+      {/* Basic Meta Tags - React 19 Native Support */}
+      <title>{article.title} | Crypto News</title>
+      <meta name="description" content={getArticleDescription()} />
+      <meta name="keywords" content={(article.tags || []).join(', ')} />
+      <meta name="author" content={getAuthorNameSafe(article.author)} />
+      <meta name="robots" content="index, follow" />
+      <link rel="canonical" href={window.location.href} />
+      
+      {/* Open Graph Tags */}
+      <meta property="og:type" content="article" />
+      <meta property="og:title" content={article.title} />
+      <meta property="og:description" content={getArticleDescription()} />
+      <meta property="og:image" content={getImageUrlSafe(article) || ""} />
+      <meta property="og:url" content={window.location.href} />
+      <meta property="og:site_name" content="Crypto News" />
+      <meta property="article:published_time" content={article.createdAt} />
+      <meta property="article:author" content={getAuthorNameSafe(article.author)} />
+      <meta property="article:section" content={article.category || ""} />
+      {(article.tags || []).map((tag, index) => (
+        <meta key={index} property="article:tag" content={tag} />
+      ))}
+      
+      {/* Twitter Card Tags */}
+      <meta name="twitter:card" content="summary_large_image" />
+      <meta name="twitter:title" content={article.title || ""} />
+      <meta name="twitter:description" content={getArticleDescription()} />
+      <meta name="twitter:image" content={getImageUrlSafe(article) || ""} />
+      
+      {/* Structured Data */}
+      <script type="application/ld+json">
+        {JSON.stringify(structuredData)}
+      </script>
 
       <div className="min-h-screen bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">

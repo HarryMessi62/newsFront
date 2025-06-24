@@ -13,19 +13,13 @@ export const SitemapManager = () => {
     queryFn: async () => {
       return await articlesAPI.getAll(1, 10000); // Получаем все статьи
     },
-    staleTime: 30 * 1000, // Кешируем только на 30 секунд
-    cacheTime: 60 * 1000, // Храним в кеше 1 минуту
+    staleTime: 5 * 60 * 1000,
   });
 
   const articles = articlesData?.articles || [];
   const generator = new SitemapGenerator();
   const sitemap = generator.generateSitemap(articles);
   const robotsTxt = generator.generateRobotsTxt();
-  
-  // Подсчитываем только опубликованные статьи
-  const publishedArticles = articles.filter(article => 
-    article.publishedAt && new Date(article.publishedAt) <= new Date()
-  );
 
   const handleDownloadSitemap = () => {
     generator.downloadSitemap(articles);
@@ -81,11 +75,6 @@ export const SitemapManager = () => {
     }
   };
 
-  const handleGoToSitemap = async () => {
-    // Открываем sitemap в новой вкладке
-    window.open('/sitemap.xml', '_blank');
-  };
-
   if (isLoading) {
     return (
       <div className="bg-white rounded-lg shadow-lg p-6">
@@ -122,7 +111,7 @@ export const SitemapManager = () => {
               Sitemap.xml
             </h3>
             <span className="text-sm text-gray-500">
-              {publishedArticles.length} статей
+              {articles.length} статей
             </span>
           </div>
           
@@ -143,13 +132,15 @@ export const SitemapManager = () => {
               Открыть в новой вкладке
             </button>
 
-            <button
-              onClick={handleGoToSitemap}
+            <a
+              href="/sitemap.xml"
+              target="_blank"
+              rel="noopener noreferrer"
               className="w-full flex items-center justify-center px-4 py-2 bg-purple-500 text-white rounded-lg hover:bg-purple-600 transition-colors"
             >
               <Globe className="w-4 h-4 mr-2" />
               Перейти к /sitemap.xml
-            </button>
+            </a>
           </div>
         </div>
 
@@ -200,11 +191,9 @@ export const SitemapManager = () => {
         <h4 className="font-semibold text-blue-800 mb-2">Информация о SEO</h4>
         <div className="text-sm text-blue-700 space-y-1">
           <p>• Sitemap обновляется автоматически при изменении статей</p>
-          <p>• В sitemap включено {publishedArticles.length} из {articles.length} статей (только опубликованные)</p>
           <p>• Доступен по адресу: <code className="bg-blue-100 px-1 rounded">{window.location.origin}/sitemap.xml</code></p>
           <p>• Robots.txt доступен по адресу: <code className="bg-blue-100 px-1 rounded">{window.location.origin}/robots.txt</code></p>
           <p>• Приоритет страниц рассчитывается автоматически по категориям и дате публикации</p>
-          <p>• Кеш обновляется каждые 30 секунд, принудительное обновление доступно кнопкой "Обновить"</p>
         </div>
       </div>
 

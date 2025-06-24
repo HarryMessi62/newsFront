@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Search, Filter, Loader } from 'lucide-react';
-import { Helmet } from 'react-helmet-async';
 import ArticleCard from '../components/ArticleCard';
 import { useArticles, useArticlesByCategory, useSearchArticles } from '../hooks/useArticles';
 
@@ -188,36 +187,34 @@ const Articles = () => {
 
   return (
     <>
-      <Helmet>
-        {/* Basic Meta Tags */}
-        <title>{seoContent.title}</title>
-        <meta name="description" content={seoContent.description} />
-        <meta name="keywords" content={seoContent.keywords} />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href={window.location.href} />
-        
-        {/* Open Graph Tags */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={seoContent.title} />
-        <meta property="og:description" content={seoContent.description} />
-        <meta property="og:url" content={window.location.href} />
-        <meta property="og:site_name" content="Crypto News" />
-        
-        {/* Twitter Card Tags */}
-        <meta name="twitter:card" content="summary" />
-        <meta name="twitter:title" content={seoContent.title} />
-        <meta name="twitter:description" content={seoContent.description} />
-        
-        {/* Category-specific tags */}
-        {selectedCategory !== 'All' && (
-          <meta name="article:section" content={selectedCategory} />
-        )}
-        
-        {/* Structured Data */}
-        <script type="application/ld+json">
-          {JSON.stringify(structuredData)}
-        </script>
-      </Helmet>
+      {/* Basic Meta Tags - React 19 Native Support */}
+      <title>{seoContent.title}</title>
+      <meta name="description" content={seoContent.description} />
+      <meta name="keywords" content={seoContent.keywords} />
+      <meta name="robots" content="index, follow" />
+      <link rel="canonical" href={window.location.href} />
+      
+      {/* Open Graph Tags */}
+      <meta property="og:type" content="website" />
+      <meta property="og:title" content={seoContent.title} />
+      <meta property="og:description" content={seoContent.description} />
+      <meta property="og:url" content={window.location.href} />
+      <meta property="og:site_name" content="Crypto News" />
+      
+      {/* Twitter Card Tags */}
+      <meta name="twitter:card" content="summary" />
+      <meta name="twitter:title" content={seoContent.title} />
+      <meta name="twitter:description" content={seoContent.description} />
+      
+      {/* Category-specific tags */}
+      {selectedCategory !== 'All' && (
+        <meta name="article:section" content={selectedCategory} />
+      )}
+      
+      {/* Structured Data */}
+      <script type="application/ld+json">
+        {JSON.stringify(structuredData)}
+      </script>
 
       <div className="min-h-screen py-8">
         <div className="container mx-auto px-4">
