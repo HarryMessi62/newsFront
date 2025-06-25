@@ -7,18 +7,18 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'https://news-back-h85g.vercel.app', // Убрать /api отсюда
+        target: 'http://45.150.34.200', // Убрать /api отсюда
         changeOrigin: true,
         secure: true, // Для HTTPS лучше true
         rewrite: (path) => path, // Оставляем путь как есть
       },
       '/sitemap.xml': {
-        target: 'https://news-back-h85g.vercel.app',
+        target: 'http://45.150.34.200',
         changeOrigin: true,
         secure: true,
       },
       '/robots.txt': {
-        target: 'https://news-back-h85g.vercel.app',
+        target: 'http://45.150.34.200',
         changeOrigin: true,
         secure: true,
       }
