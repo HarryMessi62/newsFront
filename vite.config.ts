@@ -7,18 +7,18 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://45.150.34.200', // Убрать /api отсюда
+        target: 'https://infocryptox.com', // Убрать /api отсюда
         changeOrigin: true,
         secure: true, // Для HTTPS лучше true
         rewrite: (path) => path, // Оставляем путь как есть
       },
       '/sitemap.xml': {
-        target: 'http://45.150.34.200',
+        target: 'https://infocryptox.com',
         changeOrigin: true,
         secure: true,
       },
       '/robots.txt': {
-        target: 'http://45.150.34.200',
+        target: 'https://infocryptox.com',
         changeOrigin: true,
         secure: true,
       }
