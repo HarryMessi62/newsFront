@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import { Helmet } from 'react-helmet-async';
 import { 
   Heart, 
   MessageCircle,
@@ -28,9 +29,6 @@ import ArticleContent from '../components/ArticleContent';
 import CryptoWidget from '../components/CryptoWidget';
 import CommentSection from '../components/CommentSection';
 
-
-
-
 const ArticleDetail = () => {
   const { id } = useParams();
   const { data: article, isLoading, error } = useArticle(id || '');
@@ -41,12 +39,80 @@ const ArticleDetail = () => {
   const [copied, setCopied] = useState(false);
   const [likeError, setLikeError] = useState<string | null>(null);
 
+  // Helper functions
+  const getAuthorNameSafe = (author: any): string => {
+    if (!author) return "Crypto News Team";
+    if (typeof author === 'string') return author;
+    if (typeof author === 'object') {
+      return author.fullName || author.username || author.name || "Crypto News Team";
+    }
+    return "Crypto News Team";
+  };
+
+  const getImageUrlSafe = (article: any): string | undefined => {
+    if (article?.media?.featuredImage?.url) {
+      return getImageUrl(article.media.featuredImage.url);
+    }
+    if (article?.imageUrl) {
+      return getImageUrl(article.imageUrl);
+    }
+    return undefined;
+  };
+
+  const getArticleDescription = () => {
+    if (!article) return "Loading article...";
+    if (article.excerpt) return article.excerpt;
+    if (article.content) return article.content.replace(/<[^>]*>/g, '').substring(0, 160);
+    return "";
+  };
+
+  // Generate structured data for SEO
+  const getStructuredData = () => {
+    if (!article) return {};
+    
+    return {
+      "@context": "https://schema.org",
+      "@type": "Article",
+      "headline": article.title || "",
+      "description": article.excerpt || (article.content ? article.content.replace(/<[^>]*>/g, '').substring(0, 160) : ""),
+      "image": getImageUrlSafe(article),
+      "author": {
+        "@type": "Person",
+        "name": getAuthorNameSafe(article.author)
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Crypto News",
+        "logo": {
+          "@type": "ImageObject",
+          "url": `${window.location.origin}/logo.png`
+        }
+      },
+      "datePublished": article.createdAt,
+      "dateModified": article.publishedAt || article.createdAt,
+      "articleSection": article.category || "",
+      "keywords": (article.tags || []).join(", "),
+      "url": window.location.href,
+      "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": window.location.href
+      }
+    };
+  };
+
   // Image processing - add base URL if needed
   const getImageUrl = (imageUrl?: string) => {
     if (!imageUrl) return '/placeholder-image.jpg';
     if (imageUrl.startsWith('http')) return imageUrl;
     return `http://localhost:5000${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
   };
+
+  // Обновляем title через useEffect когда статья загружена
+  useEffect(() => {
+    if (article) {
+      document.title = `${article.title} | Crypto News`;
+    }
+  }, [article]);
 
   // Загружаем информацию о лайках когда статья загружена
   useEffect(() => {
@@ -109,29 +175,41 @@ const ArticleDetail = () => {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <div className="text-center text-white">
-          <h2 className="text-2xl font-bold mb-4">Error Loading Article</h2>
-          <p className="text-gray-400 mb-4">Failed to load the article. Please try again later.</p>
-          <Link to="/articles" className="text-blue-400 hover:text-blue-300">
-            ← Back to Articles
-          </Link>
+      <>
+        <Helmet>
+          <title>Article Not Found | Crypto News</title>
+          <meta name="description" content="Article not found or failed to load" />
+        </Helmet>
+        <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+          <div className="text-center text-white">
+            <h2 className="text-2xl font-bold mb-4">Error Loading Article</h2>
+            <p className="text-gray-400 mb-4">Failed to load the article. Please try again later.</p>
+            <Link to="/articles" className="text-blue-400 hover:text-blue-300">
+              ← Back to Articles
+            </Link>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
   if (!article) {
     return (
-      <div className="min-h-screen bg-slate-900 flex items-center justify-center">
-        <div className="text-center text-white">
-          <h2 className="text-2xl font-bold mb-4">Article Not Found</h2>
-          <p className="text-gray-400 mb-4">The article you're looking for doesn't exist.</p>
-          <Link to="/articles" className="text-blue-400 hover:text-blue-300">
-            ← Back to Articles
-          </Link>
+      <>
+        <Helmet>
+          <title>Article Not Found | Crypto News</title>
+          <meta name="description" content="The article you're looking for doesn't exist" />
+        </Helmet>
+        <div className="min-h-screen bg-slate-900 flex items-center justify-center">
+          <div className="text-center text-white">
+            <h2 className="text-2xl font-bold mb-4">Article Not Found</h2>
+            <p className="text-gray-400 mb-4">The article you're looking for doesn't exist.</p>
+            <Link to="/articles" className="text-blue-400 hover:text-blue-300">
+              ← Back to Articles
+            </Link>
+          </div>
         </div>
-      </div>
+      </>
     );
   }
 
@@ -203,97 +281,37 @@ const ArticleDetail = () => {
 
   const relatedArticles = relatedData?.articles || [];
 
-  // Helper function to get author name safely
-  const getAuthorNameSafe = (author: any): string => {
-    if (!author) return "Crypto News Team";
-    if (typeof author === 'string') return author;
-    if (typeof author === 'object') {
-      return author.fullName || author.username || author.name || "Crypto News Team";
-    }
-    return "Crypto News Team";
-  };
-
-  // Helper function to get image URL
-  const getImageUrlSafe = (article: any): string | undefined => {
-    if (article.media?.featuredImage?.url) {
-      return getImageUrl(article.media.featuredImage.url);
-    }
-    if (article.imageUrl) {
-      return getImageUrl(article.imageUrl);
-    }
-    return undefined;
-  };
-
-  // Generate structured data for SEO
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": article.title || "",
-    "description": article.excerpt || (article.content ? article.content.replace(/<[^>]*>/g, '').substring(0, 160) : ""),
-    "image": getImageUrlSafe(article),
-    "author": {
-      "@type": "Person",
-      "name": getAuthorNameSafe(article.author)
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "Crypto News",
-      "logo": {
-        "@type": "ImageObject",
-        "url": `${window.location.origin}/logo.png`
-      }
-    },
-    "datePublished": article.createdAt,
-    "dateModified": article.publishedAt || article.createdAt,
-    "articleSection": article.category || "",
-    "keywords": (article.tags || []).join(", "),
-    "url": window.location.href,
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": window.location.href
-    }
-  };
-
-  const getArticleDescription = () => {
-    if (article.excerpt) return article.excerpt;
-    if (article.content) return article.content.replace(/<[^>]*>/g, '').substring(0, 160);
-    return "";
-  };
-
   return (
     <>
-      {/* Basic Meta Tags - React 19 Native Support */}
-      <title>{article.title} | Crypto News</title>
-      <meta name="description" content={getArticleDescription()} />
-      <meta name="keywords" content={(article.tags || []).join(', ')} />
-      <meta name="author" content={getAuthorNameSafe(article.author)} />
-      <meta name="robots" content="index, follow" />
-      <link rel="canonical" href={window.location.href} />
-      
-      {/* Open Graph Tags */}
-      <meta property="og:type" content="article" />
-      <meta property="og:title" content={article.title} />
-      <meta property="og:description" content={getArticleDescription()} />
-      <meta property="og:image" content={getImageUrlSafe(article) || ""} />
-      <meta property="og:url" content={window.location.href} />
-      <meta property="og:site_name" content="Crypto News" />
-      <meta property="article:published_time" content={article.createdAt} />
-      <meta property="article:author" content={getAuthorNameSafe(article.author)} />
-      <meta property="article:section" content={article.category || ""} />
-      {(article.tags || []).map((tag, index) => (
-        <meta key={index} property="article:tag" content={tag} />
-      ))}
-      
-      {/* Twitter Card Tags */}
-      <meta name="twitter:card" content="summary_large_image" />
-      <meta name="twitter:title" content={article.title || ""} />
-      <meta name="twitter:description" content={getArticleDescription()} />
-      <meta name="twitter:image" content={getImageUrlSafe(article) || ""} />
-      
-      {/* Structured Data */}
-      <script type="application/ld+json">
-        {JSON.stringify(structuredData)}
-      </script>
+      <Helmet>
+        <meta name="description" content={getArticleDescription()} />
+        <meta name="keywords" content={(article.tags || []).join(', ')} />
+        <meta name="author" content={getAuthorNameSafe(article.author)} />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href={window.location.href} />
+        
+        <meta property="og:type" content="article" />
+        <meta property="og:title" content={article.title} />
+        <meta property="og:description" content={getArticleDescription()} />
+        <meta property="og:image" content={getImageUrlSafe(article) || ""} />
+        <meta property="og:url" content={window.location.href} />
+        <meta property="og:site_name" content="Crypto News" />
+        <meta property="article:published_time" content={article.createdAt} />
+        <meta property="article:author" content={getAuthorNameSafe(article.author)} />
+        <meta property="article:section" content={article.category || ""} />
+        {(article.tags || []).map((tag, index) => (
+          <meta key={index} property="article:tag" content={tag} />
+        ))}
+        
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={article.title || ""} />
+        <meta name="twitter:description" content={getArticleDescription()} />
+        <meta name="twitter:image" content={getImageUrlSafe(article) || ""} />
+        
+        <script type="application/ld+json">
+          {JSON.stringify(getStructuredData())}
+        </script>
+      </Helmet>
 
       <div className="min-h-screen bg-slate-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
