@@ -28,7 +28,7 @@ const Home = () => {
   const getImageUrl = (imageUrl: string) => {
     if (!imageUrl) return 'https://images.unsplash.com/photo-1518546305927-5a555bb7020d?w=800&h=400&fit=crop';
     if (imageUrl.startsWith('http')) return imageUrl;
-    return `http://localhost:5000${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
+    return `https://infocryptox.com${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
   };
 
   const formatDate = (dateString: string) => {

@@ -104,7 +104,7 @@ const ArticleDetail = () => {
   const getImageUrl = (imageUrl?: string) => {
     if (!imageUrl) return '/placeholder-image.jpg';
     if (imageUrl.startsWith('http')) return imageUrl;
-    return `http://localhost:5000${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
+    return `https://infocryptox.com${imageUrl.startsWith('/') ? '' : '/'}${imageUrl}`;
   };
 
   // Обновляем title через useEffect когда статья загружена
